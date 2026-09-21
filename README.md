@@ -1,5 +1,7 @@
 # Joe Orchard — Programmer Portfolio
 
+https://joeorchard03.github.io/index.html
+
 A static rebuild of my original Squarespace portfolio three HTML files, one stylesheet, and the images.
 
 ## Structure
