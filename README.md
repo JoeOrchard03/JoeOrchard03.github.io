@@ -1,7 +1,6 @@
 # Joe Orchard — Programmer Portfolio
 
-A static rebuild of the original Squarespace portfolio, ready to host free on GitHub Pages.
-No build step, no framework, no JavaScript — three HTML files, one stylesheet, and the images.
+A static rebuild of my original Squarespace portfolio three HTML files, one stylesheet, and the images.
 
 ## Structure
 
