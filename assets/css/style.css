@@ -1,0 +1,489 @@
+/* Joe Orchard — programmer portfolio
+   Palette and type sampled from the original Squarespace site:
+   bg rgb(92,87,81) · text #fff · accent rgb(189,178,195)
+   headings Manrope · body Poppins
+
+   --accent      decorative only (rules, borders, underlines)
+   --accent-text brighter tint used for any accent-coloured TEXT, so links
+                 clear 4.5:1 against the background (the original accent
+                 manages only 3.5:1 and fails AA at body size) */
+
+:root {
+  --bg:           #5c5751;
+  --bg-raise:     #66605a;   /* cards / chips sitting on the base */
+  --bg-light:     #ece8e3;   /* footer band */
+  --text:         #ffffff;
+  --text-soft:    rgba(255, 255, 255, 0.82);
+  --text-dark:    #24211e;
+  --accent:       #bdb2c3;
+  --accent-text:  #d9d0e0;
+  --rule:         rgba(255, 255, 255, 0.16);
+  --rule-strong:  rgba(255, 255, 255, 0.28);
+
+  --font-head: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --measure: 1040px;  /* page width: header, images, galleries */
+  --prose:   72ch;    /* reading width: paragraphs and lists */
+  --gutter:  24px;
+  --header-h: 92px;
+
+  --radius: 5px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  /* Full-bleed children are 100vw, which counts the scrollbar, so they overhang
+     the layout viewport by the scrollbar's width. Clip it at the root.
+     `clip` (not `hidden`) leaves the sticky header working. */
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  /* `clip`, NOT `hidden`: hidden would make body a scroll container and break
+     the sticky header. clip just trims the full-bleed overhang caused by the
+     scrollbar being counted in 100vw. */
+  overflow-x: clip;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);   /* 16 → 18px */
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--accent-text); text-underline-offset: 0.18em; }
+a:hover { color: #fff; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip-link {
+  position: absolute; left: -9999px;
+  background: var(--accent-text); color: var(--text-dark);
+  padding: 0.6em 1em; z-index: 100; border-radius: var(--radius);
+}
+.skip-link:focus { left: var(--gutter); top: var(--gutter); }
+
+/* ---------------- header ---------------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 18px 0;
+  background: rgba(92, 87, 81, 0.94);
+  border-bottom: 1px solid var(--rule);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .site-header {
+    background: rgba(92, 87, 81, 0.78);
+    backdrop-filter: blur(10px) saturate(1.2);
+  }
+}
+
+/* Title left, nav right. The nav is wider than the row can hold at most
+   widths (the dissertation link alone is ~350px), so the nav wraps inside
+   itself and stays right-aligned, rather than the whole row wrapping and
+   dropping the nav underneath the title. */
+.site-header .wrap {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 28px;
+}
+
+.site-title { flex: 0 0 auto; }
+
+.site-title {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.06rem;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 2px 4px;
+  font-size: 0.875rem;
+}
+
+.site-nav a {
+  position: relative;
+  color: var(--text-soft);
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: var(--radius);
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+.site-nav a:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
+
+.site-nav a[aria-current="page"] { color: #fff; }
+.site-nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 10px; right: 10px; bottom: 1px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* ---------------- headings ---------------- */
+
+h1, h2, h3 {
+  font-family: var(--font-head);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.015em;
+}
+
+.page-title {
+  font-size: clamp(2rem, 1.5rem + 2.1vw, 2.9rem);
+  text-align: center;
+  margin: 56px 0 8px;
+}
+
+/* underline sits under the text only, not the full column */
+.page-title span {
+  display: inline-block;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--accent);
+}
+
+.project-title {
+  font-size: clamp(1.45rem, 1.15rem + 1.35vw, 2.05rem);
+  margin: 0 0 26px;
+}
+.project-title span {
+  display: inline-block;
+  padding-bottom: 9px;
+  border-bottom: 2px solid var(--rule-strong);
+}
+
+/* small label above a block of copy — "Overview:", "Key Features:" etc. */
+.block-heading {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+  margin: 36px 0 10px;
+}
+
+/* ---------------- project jump links ---------------- */
+
+.anchor-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 0 72px;
+  padding: 0;
+  list-style: none;
+}
+
+.anchor-nav a {
+  display: block;
+  padding: 10px 17px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent-text);
+  text-decoration: none;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  white-space: nowrap;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.anchor-nav a:hover,
+.anchor-nav a:focus-visible {
+  background: var(--accent-text);
+  border-color: var(--accent-text);
+  color: var(--bg);
+}
+
+@media (max-width: 560px) {
+  .anchor-nav a { white-space: normal; text-align: center; }
+}
+
+/* ---------------- project ---------------- */
+
+.project {
+  margin: 0 0 84px;
+  padding-bottom: 84px;
+  border-bottom: 1px solid var(--rule);
+}
+.project:last-of-type { border-bottom: 0; padding-bottom: 0; }
+
+/* Reading width for text; images and galleries stay full width.
+   Declared before the pull-quote rules so those can override cleanly. */
+.project > p,
+.project > ul,
+.project > ol { max-width: var(--prose); }
+
+/* Full-bleed: break out of the centred column to the full viewport width.
+   50% is half the container's content box, 50vw half the viewport, so the
+   negative margin is exactly the gap on each side. */
+.full-bleed,
+.project-hero,
+.gallery { margin-inline: calc(50% - 50vw); }
+
+.project-hero { margin-block: 0 36px; }
+.project-hero img {
+  width: 100%;
+  /* Natural aspect would make a 16:9 shot taller than most screens at this
+     width, so cap it — the two banner-strip images are shorter than the cap
+     and are left untouched. */
+  max-height: 72vh;
+  object-fit: cover;
+  object-position: center;
+  border-block: 1px solid var(--rule);
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+  margin-block: 0 36px;
+  padding-inline: var(--gutter);
+  align-items: start;
+}
+.gallery img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+}
+
+/* A gallery whose source images are small — spreading them edge to edge would
+   upscale them into mush, so keep this one at the text column's width. */
+/* Inherits the full-bleed margin from .gallery, then pads back in so the grid
+   itself never exceeds 1240px. That is the widest it goes before its 386px
+   sources get upscaled — three columns land at ~390px, essentially native.
+   (A plain max-width cannot work here: the element is still laid out inside
+   the 992px column, so it never reaches 1240 to be capped.) */
+.gallery--compact {
+  padding-inline: max(var(--gutter), calc(50vw - 620px));
+}
+
+/* pull quote — the game's own blurb */
+.project > .pullquote {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: clamp(1.08rem, 0.98rem + 0.5vw, 1.38rem);
+  line-height: 1.45;
+  color: var(--text);
+  text-align: center;
+  text-wrap: balance;
+  max-width: 54ch;
+  margin: 0 auto 40px;
+  padding: 0 0 0;
+  border-left: 0;
+}
+
+.project p { margin: 0 0 18px; }
+
+.project ul { margin: 0 0 18px; padding-left: 1.3em; }
+.project li { margin-bottom: 9px; }
+.project li::marker { color: var(--accent); }
+.project ul ul { margin: 9px 0 0; }
+
+.project strong { font-weight: 600; color: #fff; }
+
+/* long URLs shouldn't blow out the column */
+.project a { overflow-wrap: anywhere; }
+
+/* link lists — no bullets, no bullet indent */
+.project > ul.links-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 8px;
+}
+.project > ul.links-list li { margin-bottom: 7px; }
+
+/* skill chips */
+.project > ul.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding-left: 0;
+  max-width: none;
+  margin: 0 0 8px;
+}
+.project > ul.tags li {
+  margin: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--rule-strong);
+  background: var(--bg-raise);
+  border-radius: 999px;
+  color: var(--text-soft);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+/* ---------------- about ---------------- */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 270px) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+  margin: 48px 0 12px;
+}
+.about-grid figure { margin: 0; }
+.about-grid img {
+  width: 100%;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+}
+.about-grid p { margin: 0 0 20px; max-width: 62ch; }
+.about-grid p:last-child { margin-bottom: 0; }
+
+@media (max-width: 760px) {
+  .about-grid { grid-template-columns: 1fr; gap: 28px; }
+  .about-grid figure { max-width: 230px; }
+}
+
+/* a full-sentence subheading, rather than a short uppercase label */
+.section-lead {
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: clamp(1.15rem, 1.02rem + 0.55vw, 1.45rem);
+  line-height: 1.3;
+  margin: 52px 0 22px;
+  max-width: 48ch;   /* keeps this heading on one line at desktop width */
+}
+.section-lead::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 2px;
+  margin-top: 14px;
+  background: var(--accent);
+}
+
+.skills-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px 26px;
+}
+.skills-list li {
+  border-left: 2px solid var(--accent);
+  padding: 4px 0 4px 16px;
+  color: var(--text-soft);
+}
+
+main .block-heading { margin-top: 44px; }
+
+/* ---------------- footer ---------------- */
+
+.site-footer {
+  background: var(--bg-light);
+  color: var(--text-dark);
+  padding: 64px 0 56px;
+  text-align: center;
+  margin-top: 88px;
+}
+
+.site-footer p {
+  max-width: 56ch;
+  margin: 0 auto 32px;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.site-footer h2 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0 0 18px;
+  color: rgba(36, 33, 30, 0.7);
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1.5px solid rgba(36, 33, 30, 0.35);
+  border-radius: 50%;
+  color: var(--text-dark);
+  transition: background-color 0.18s ease, color 0.18s ease,
+              border-color 0.18s ease, transform 0.18s ease;
+}
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  background: var(--text-dark);
+  border-color: var(--text-dark);
+  color: var(--bg-light);
+  transform: translateY(-2px);
+}
+.footer-links svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* ---------------- small screens ---------------- */
+
+@media (max-width: 680px) {
+  :root { --header-h: 118px; }
+
+  .site-header { padding: 12px 0; }
+  /* stacked on narrow screens: title on its own line, nav left-aligned below */
+  .site-header .wrap { flex-wrap: wrap; justify-content: flex-start; gap: 6px 16px; }
+  .site-nav { justify-content: flex-start; gap: 2px; font-size: 0.8125rem; }
+  .site-nav a { padding: 5px 8px; }
+  .site-nav a[aria-current="page"]::after { left: 8px; right: 8px; }
+
+  .page-title { margin-top: 40px; }
+  .anchor-nav { margin-bottom: 52px; }
+  .project { margin-bottom: 60px; padding-bottom: 60px; }
+  .site-footer { margin-top: 64px; padding: 48px 0 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
